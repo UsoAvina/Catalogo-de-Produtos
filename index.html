@@ -1086,9 +1086,22 @@ function renderPurchaseFinal(){
   document.getElementById('fieldNome').addEventListener('input', (e) => { purchaseState.customer.nome = e.target.value; });
   document.getElementById('fieldPagamento').addEventListener('change', (e) => { purchaseState.customer.pagamento = e.target.value; });
   document.getElementById('fieldCelular').addEventListener('input', (e) => {
-    const formatted = formatPhone(e.target.value);
-    e.target.value = formatted;
+    const input = e.target;
+    const cursorPos = input.selectionStart;
+    const digitsBeforeCursor = input.value.slice(0, cursorPos).replace(/\D/g, '').length;
+    const formatted = formatPhone(input.value);
+    input.value = formatted;
     purchaseState.customer.celular = formatted;
+
+    // Reposiciona o cursor logo após o dígito correspondente, sem selecionar texto
+    let digitCount = 0;
+    let newPos = formatted.length;
+    for (let i = 0; i < formatted.length; i++){
+      if (/\d/.test(formatted[i])) digitCount++;
+      if (digitCount === digitsBeforeCursor){ newPos = i + 1; break; }
+    }
+    if (digitsBeforeCursor === 0) newPos = 0;
+    input.setSelectionRange(newPos, newPos);
   });
   const enderecoField = document.getElementById('fieldEndereco');
   if (enderecoField){
