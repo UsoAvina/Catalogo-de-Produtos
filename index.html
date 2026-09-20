@@ -295,7 +295,7 @@
   .ph-head-price{ color:var(--brown-mid); font-size:1.35rem; margin-top:4px; }
 
   .field{ margin-top:24px; }
-  .field label{ display:block; font-size:0.95rem; letter-spacing:0.02em; color:var(--brown-mid); margin-bottom:9px; }
+  .field label{ display:block; font-size:1.08rem; font-weight:600; letter-spacing:0.02em; color:var(--brown-dark); margin-bottom:9px; }
   .swatches{ display:flex; flex-wrap:wrap; gap:10px; }
   .swatch{
     padding:9px 16px; border:1px solid var(--line); background:var(--white);
@@ -315,6 +315,10 @@
   .order-line{
     display:flex; justify-content:space-between; gap:10px;
     font-size:1.05rem; padding:9px 0; border-bottom:1px solid var(--line);
+  }
+  .order-line .price, .order-total-row .price{
+    flex-shrink:0; white-space:nowrap; text-align:right;
+    font-variant-numeric:tabular-nums; font-feature-settings:"tnum";
   }
   .order-total-row{
     display:flex; justify-content:space-between;
@@ -494,6 +498,15 @@ const DELIVERY_METHODS = [
 ];
 
 function money(v){ return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }); }
+function formatPhone(value){
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  const len = digits.length;
+  if (len === 0) return '';
+  if (len <= 2) return `(${digits}`;
+  if (len <= 6) return `(${digits.slice(0,2)}) ${digits.slice(2)}`;
+  if (len <= 10) return `(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+  return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+}
 
 /* gera SVG placeholder para cada categoria/variante, usado como "foto" do produto */
 function productSVG(category, variantIndex){
@@ -1017,12 +1030,12 @@ function renderPurchaseFinal(){
         const opts = [item.finish, item.size ? (item.sizeLabel || 'Tamanho') + ': ' + item.size : null].filter(Boolean).join(' · ');
         return `<div class="order-line">
           <span>${item.qty}x ${item.name}${opts ? ' <span style="color:var(--brown-mid);">(' + opts + ')</span>' : ''}</span>
-          <span>${money(item.price * item.qty)}</span>
+          <span class="price">${money(item.price * item.qty)}</span>
         </div>`;
       }).join('')}
       <div class="order-total-row">
         <span>Total</span>
-        <span>${money(total)}</span>
+        <span class="price">${money(total)}</span>
       </div>
     </div>
 
@@ -1068,7 +1081,11 @@ function renderPurchaseFinal(){
 
   document.getElementById('fieldNome').addEventListener('input', (e) => { purchaseState.customer.nome = e.target.value; });
   document.getElementById('fieldPagamento').addEventListener('change', (e) => { purchaseState.customer.pagamento = e.target.value; });
-  document.getElementById('fieldCelular').addEventListener('input', (e) => { purchaseState.customer.celular = e.target.value; });
+  document.getElementById('fieldCelular').addEventListener('input', (e) => {
+    const formatted = formatPhone(e.target.value);
+    e.target.value = formatted;
+    purchaseState.customer.celular = formatted;
+  });
   const enderecoField = document.getElementById('fieldEndereco');
   if (enderecoField){
     enderecoField.addEventListener('input', (e) => { purchaseState.customer.endereco = e.target.value; });
@@ -1087,11 +1104,10 @@ function buildWhatsAppMessage(order, customer){
   const total = order.reduce((s, i) => s + i.price * i.qty, 0);
 
   const lines = [];
-  lines.push('▪ *Novo pedido — Avina*');
-  lines.push('');
   lines.push(`Olá! Me chamo *${customer.nome}* e gostaria de finalizar o pedido que fiz no site.`);
   lines.push('');
-  lines.push('▪ *Itens do pedido:*');
+  lines.push('➤ *Itens do pedido:*');
+  lines.push('');
   order.forEach(item => {
     const opts = [item.finish, item.size ? 'Tam: ' + item.size : null].filter(Boolean).join(' - ');
     lines.push(`- ${item.qty}x *${item.name}*${opts ? ' (' + opts + ')' : ''} — ${money(item.price * item.qty)}`);
