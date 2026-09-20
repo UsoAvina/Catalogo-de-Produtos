@@ -7,6 +7,12 @@ descrição da mudança.
 
 ---
 
+**V17** — Mensagem do WhatsApp padronizada: emojis (📦🛍️💰💳🚚📍📱) trocados
+por símbolos simples e universalmente compatíveis (▪ para títulos de seção,
+- para itens da lista, ➤ para campos de dados), corrigindo o erro de
+codificação (losango com interrogação) que aparecia em alguns aparelhos ao
+abrir o link do WhatsApp.
+
 **V16** — 08/09/2026 02:29
 Adicionado cabeçalho de controle de versão no topo do `index.html`
 (título, data/hora, descrição da última mudança e número da versão) e
