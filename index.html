@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <!--
   Site Avina — Catálogo de Produtos
-  Versão: V23
+  Versão: V25
   Data: 20/09/2026
-  Última mudança: topo com ícone de 3 riscos que abre menu lateral (produtos
-  + botões "Sobre nós" e "Contatos"); faixa de filtros substituída por uma
-  faixa marrom fina; corrigida faixa lateral do carrinho aparecendo no celular.
+  Última mudança: removido o título "Geral" do topo da lista de produtos
+  (o nome da categoria só aparece quando uma categoria específica é escolhida).
 -->
 <html lang="pt-BR">
 <head>
@@ -144,12 +143,53 @@
   .menu-button:hover{ background:rgba(82,63,49,0.08); }
   .menu-button svg{ width:24px; height:24px; }
 
+  /* ---------- MENSAGEM DA MARCA ---------- */
+  .brand-message{
+    background:linear-gradient(180deg, #f1e9dc 0%, #ebe0cf 100%);
+    border-bottom:1px solid var(--line);
+    padding:52px 24px 48px;
+    text-align:center;
+  }
+  .bm-inner{ max-width:720px; margin:0 auto; }
+  .bm-ornament{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+  }
+  .bm-ornament span{ display:block; width:52px; height:1px; background:var(--tan); }
+  .bm-ornament i{
+    display:block; width:7px; height:7px;
+    border:1px solid var(--tan); transform:rotate(45deg);
+  }
+  .bm-title{
+    margin:26px 0 20px;
+    font-size:clamp(1.3rem, 4.6vw, 1.95rem);
+    font-weight:500; line-height:1.35;
+    color:var(--brown-dark);
+    text-wrap:balance;
+  }
+  .bm-text{
+    margin:0 auto;
+    max-width:600px;
+    font-size:0.98rem; line-height:1.85;
+    color:var(--brown-dark); opacity:0.88;
+  }
+  .bm-closing{
+    margin:22px 0 28px;
+    font-size:1.05rem; font-weight:600; letter-spacing:0.01em;
+    color:var(--brown-dark);
+  }
+  @media (max-width:480px){
+    .brand-message{ padding:40px 22px 38px; }
+    .bm-title{ margin:22px 0 16px; }
+    .bm-text{ font-size:0.92rem; line-height:1.8; }
+  }
+
   /* ---------- GRID ---------- */
   main{ max-width:1280px; margin:0 auto; padding:40px 24px 100px; }
   .section-title{
     text-align:center; margin:0 0 36px;
     font-weight:500; font-size:1.3rem; color:var(--brown-dark);
   }
+  .section-title:empty{ display:none; }
   .grid{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -501,8 +541,18 @@
 </aside>
 
 
+<section class="brand-message" aria-label="Sobre a Avina">
+  <div class="bm-inner">
+    <div class="bm-ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+    <h2 class="bm-title">Por que esperar por um grande evento se o seu hoje já é especial?</h2>
+    <p class="bm-text">A Avina existe para que você celebre a sua própria beleza diariamente. Nossas peças foram escolhidas para estarem com você da rotina mais simples aos momentos inesquecíveis.</p>
+    <p class="bm-closing">Não existe hora marcada para se amar.</p>
+    <div class="bm-ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+  </div>
+</section>
+
 <main>
-  <h1 class="section-title" id="sectionTitle">Geral</h1>
+  <h1 class="section-title" id="sectionTitle"></h1>
   <div class="grid" id="productGrid"></div>
 </main>
 
@@ -834,7 +884,7 @@ function setFilter(key){
   currentFilter = key;
   document.querySelectorAll('#menuCategories .menu-item').forEach(b => b.classList.toggle('active', b.dataset.key === key));
   const cat = CATEGORIES.find(c => c.key === key);
-  document.getElementById('sectionTitle').textContent = cat.label;
+  document.getElementById('sectionTitle').textContent = (key === 'geral') ? '' : cat.label; // "Geral" não exibe título
   renderGrid();
 }
 
