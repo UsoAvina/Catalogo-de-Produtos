@@ -29,10 +29,14 @@
     background:var(--cream);
     color:var(--brown-dark);
     font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-variant-numeric:lining-nums tabular-nums;
+    font-feature-settings:"lnum" 1, "tnum" 1;
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,h3,.serif{font-family:'Cormorant Garamond', serif;}
   button{font-family:inherit;}
+  button, input, select, textarea{ font-weight:inherit; }
   img{max-width:100%;display:block;}
 
   /* ---------- HEADER ---------- */
@@ -1023,7 +1027,7 @@ function renderPurchaseFinal(){
 
   purchaseBody.innerHTML = `
     <h3 class="serif" style="margin:0 0 6px; font-size:1.6rem;">Finalizar pedido</h3>
-    <p style="color:var(--brown-mid); font-size:1rem; margin:0 0 18px;">Confirme seus dados — o pedido será enviado para o nosso WhatsApp.</p>
+    <p style="color:var(--brown-dark); font-size:1rem; margin:0 0 18px; opacity:0.85;">Confirme seus dados — o pedido será enviado para o nosso WhatsApp.</p>
 
     <div class="order-summary">
       ${order.map(item => {
