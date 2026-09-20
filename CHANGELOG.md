@@ -7,6 +7,14 @@ descrição da mudança.
 
 ---
 
+**V21** — Corrigido de vez o desalinhamento dos números: a fonte
+Cormorant Garamond não suporta os recursos de OpenType usados
+anteriormente (lining/tabular nums), então aquele ajuste não tinha efeito
+visual. Agora todos os preços do site (cards do catálogo, zoom de fotos,
+modal de compra, resumo do checkout e carrinho lateral) usam uma fonte
+serifada com algarismos padronizados (Georgia), garantindo alinhamento
+consistente em qualquer lugar que apareça um valor em R$.
+
 **V20** — Corrigido bug no campo "Celular para contato": ao digitar, o
 cursor não era reposicionado após a formatação automática, fazendo alguns
 celulares selecionarem parte do número digitado — se a pessoa continuasse
