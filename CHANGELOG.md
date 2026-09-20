@@ -7,6 +7,15 @@ descrição da mudança.
 
 ---
 
+**V18** — Ajustes na tela de "Finalizar pedido" e na mensagem do WhatsApp:
+mensagem agora começa direto na saudação (sem linha de título); marcador
+"▪" (que ainda dava erro em alguns aparelhos) trocado por "➤"; linha em
+branco adicionada antes da lista de itens; números do resumo do pedido
+agora alinhados (colunas numéricas tabulares); labels dos campos do
+formulário com fonte maior e mais escura; campo "Celular para contato"
+agora formata automaticamente no padrão (xx) xxxxx-xxxx enquanto o
+cliente digita.
+
 **V17** — Mensagem do WhatsApp padronizada: emojis (📦🛍️💰💳🚚📍📱) trocados
 por símbolos simples e universalmente compatíveis (▪ para títulos de seção,
 - para itens da lista, ➤ para campos de dados), corrigindo o erro de
