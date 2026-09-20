@@ -192,6 +192,11 @@
 
   .card-info{ text-align:center; margin-top:14px; }
   .card-name{ font-size:1.2rem; font-weight:500; margin:0; color:var(--brown-dark); }
+  .card-price, .ph-head-price, .lb-price, .price, .price-num{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings:"lnum" 1, "tnum" 1;
+  }
   .card-price{ margin-top:6px; color:var(--brown-mid); font-size:1.35rem; }
 
   .card-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:16px; }
@@ -1224,7 +1229,7 @@ function renderCartDrawer(){
             <span>${item.qty}</span>
             <button data-inc="${i}">+</button>
           </div>
-          <div>${money(item.price * item.qty)}</div>
+          <div class="price-num">${money(item.price * item.qty)}</div>
         </div>
         <button class="ci-remove" data-remove="${i}">Remover</button>
       </div>
@@ -1235,7 +1240,7 @@ function renderCartDrawer(){
   cartFoot.innerHTML = `
     <div class="cart-total-row">
       <span>Total</span>
-      <strong>${money(total)}</strong>
+      <strong class="price-num">${money(total)}</strong>
     </div>
     <button class="btn btn-solid" id="cartCheckoutBtn">Finalizar Compra</button>
     <button class="btn" id="cartContinueBtn">Continuar Vendo Produtos</button>
