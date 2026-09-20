@@ -1087,24 +1087,24 @@ function buildWhatsAppMessage(order, customer){
   const total = order.reduce((s, i) => s + i.price * i.qty, 0);
 
   const lines = [];
-  lines.push('📦 *Novo pedido — Avina*');
+  lines.push('▪ *Novo pedido — Avina*');
   lines.push('');
-  lines.push(`Olá! 👋 Me chamo *${customer.nome}* e gostaria de finalizar o pedido que fiz no site.`);
+  lines.push(`Olá! Me chamo *${customer.nome}* e gostaria de finalizar o pedido que fiz no site.`);
   lines.push('');
-  lines.push('🛍️ *Itens do pedido:*');
+  lines.push('▪ *Itens do pedido:*');
   order.forEach(item => {
     const opts = [item.finish, item.size ? 'Tam: ' + item.size : null].filter(Boolean).join(' - ');
-    lines.push(`* ${item.qty}x *${item.name}*${opts ? ' (' + opts + ')' : ''} — ${money(item.price * item.qty)}`);
+    lines.push(`- ${item.qty}x *${item.name}*${opts ? ' (' + opts + ')' : ''} — ${money(item.price * item.qty)}`);
   });
   lines.push('');
-  lines.push(`💰 *Total:* ${money(total)}`);
+  lines.push(`➤ *Total:* ${money(total)}`);
   lines.push('');
-  lines.push(`💳 *Forma de pagamento:* ${customer.pagamento}`);
-  lines.push(`🚚 *Forma de entrega:* ${deliveryLabel}`);
+  lines.push(`➤ *Forma de pagamento:* ${customer.pagamento}`);
+  lines.push(`➤ *Forma de entrega:* ${deliveryLabel}`);
   if (customer.entrega === 'app99'){
-    lines.push(`📍 *Endereço:* ${customer.endereco}`);
+    lines.push(`➤ *Endereço:* ${customer.endereco}`);
   }
-  lines.push(`📱 *Celular para contato:* ${customer.celular}`);
+  lines.push(`➤ *Celular para contato:* ${customer.celular}`);
   return lines.join('\n');
 }
 
