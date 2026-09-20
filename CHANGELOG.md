@@ -7,6 +7,40 @@ descrição da mudança.
 
 ---
 
+**V26** — 20/09/2026
+"Sobre nós" (menu lateral) agora rola até a mensagem da marca no topo.
+Criada a seção "Fale com a Avina" no final do site, em fundo marrom, com
+três botões no estilo do site: WhatsApp (abre conversa com mensagem
+pronta), Instagram (@usoavina) e E-mail (usoavina@gmail.com). O botão
+"Contatos" do menu lateral rola até essa seção.
+
+**V25** — 20/09/2026
+Removido o título "Geral" que aparecia acima dos produtos. O nome da
+categoria continua aparecendo apenas quando uma categoria específica é
+escolhida no menu (Brinco, Colar, etc.).
+
+**V24** — 20/09/2026
+Nova seção de destaque no topo do site, logo abaixo do cabeçalho, com a
+mensagem da marca ("Por que esperar por um grande evento se o seu hoje já
+é especial?..."). Fundo em tom areia, ornamentos finos em dourado
+(linha + losango), título maior e a frase final em destaque, seguindo a
+paleta e a tipografia do site.
+
+**V23** — 20/09/2026
+Novo topo: ícone de três riscos horizontais (à esquerda) abre um menu
+lateral com as categorias de produtos (Geral, Brinco, Colar, etc.) e, no
+final, os botões "Sobre nós" e "Contatos" (ainda sem ação). A faixa de
+filtros marrom foi substituída por uma faixa marrom bem mais fina, colada
+ao topo. Corrigido também um detalhe no celular: o carrinho lateral
+escondido deixava uma faixa/sombra visível na borda direita da tela.
+
+**V22** — 20/09/2026
+Fonte de todo o site (letras e números, incluindo preços) trocada para
+Montserrat, para ficar igual ao estilo do site de referência. Removidas a
+Cormorant Garamond e a Georgia; tamanhos de texto reduzidos para
+compensar a fonte maior; itálico removido. A fonte fica na variável CSS
+`--font` (no `:root`), facilitando trocar no futuro.
+
 **V21** — Corrigido de vez o desalinhamento dos números: a fonte
 Cormorant Garamond não suporta os recursos de OpenType usados
 anteriormente (lining/tabular nums), então aquele ajuste não tinha efeito
@@ -88,12 +122,4 @@ nomes dos produtos).
 **V4** — Faixa de filtros com destaque: fundo escuro sólido, texto maior
 e com mais contraste.
 
-**V3** — Logo da Avina incorporada diretamente no código em base64 (fundo
-removido, recortada).
-
-**V2** — Tentativa de logo via link do Google Drive (não funcionou —
-Google bloqueia esse tipo de link direto).
-
-**V1** — Modelo inicial do site: catálogo estilo revista, logo central,
-carrinho, filtros por categoria, zoom de fotos, modal de compra e
-carrinho lateral.
+**V3** — Logo da Avina incorporada diretamente no código
