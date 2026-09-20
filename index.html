@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!--
+  Site Avina — Catálogo de Produtos
+  Versão: V22
+  Data: 20/09/2026
+  Última mudança: fonte de todo o site trocada de Cormorant Garamond/Georgia
+  para Montserrat (letras e números), com tamanhos ajustados. A fonte agora
+  é controlada por uma única variável CSS (--font) no :root.
+-->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -10,9 +18,10 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#523f31">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
+    --font:'Montserrat', 'Helvetica Neue', Arial, sans-serif;
     --brown-dark:#523f31;
     --brown-mid:#856f56;
     --tan:#b79f7b;
@@ -28,13 +37,11 @@
     margin:0;
     background:var(--cream);
     color:var(--brown-dark);
-    font-family:'Cormorant Garamond', serif;
-    font-weight:600;
-    font-variant-numeric:lining-nums tabular-nums;
-    font-feature-settings:"lnum" 1, "tnum" 1;
+    font-family:var(--font);
+    font-weight:400;
     -webkit-font-smoothing:antialiased;
   }
-  h1,h2,h3,.serif{font-family:'Cormorant Garamond', serif;}
+  h1,h2,h3,.serif{font-family:var(--font);}
   button{font-family:inherit;}
   button, input, select, textarea{ font-weight:inherit; }
   img{max-width:100%;display:block;}
@@ -60,8 +67,7 @@
     user-select:none;
   }
   .logo .mark{
-    font-family:'Cormorant Garamond', serif;
-    font-style:italic;
+    font-family:var(--font);
     font-weight:500;
     font-size:2.3rem;
     color:var(--brown-dark);
@@ -131,7 +137,7 @@
   .filter-btn{
     background:none; border:none; cursor:pointer;
     color:rgba(255,253,251,0.62);
-    font-size:1.15rem;
+    font-size:0.95rem;
     font-weight:500;
     padding:9px 16px;
     border-radius:4px;
@@ -149,7 +155,7 @@
   main{ max-width:1280px; margin:0 auto; padding:40px 24px 100px; }
   .section-title{
     text-align:center; margin:0 0 36px;
-    font-weight:500; font-size:1.6rem; color:var(--brown-dark);
+    font-weight:500; font-size:1.3rem; color:var(--brown-dark);
   }
   .grid{
     display:grid;
@@ -191,13 +197,12 @@
   .dot.active{ background:var(--brown-dark); }
 
   .card-info{ text-align:center; margin-top:14px; }
-  .card-name{ font-size:1.2rem; font-weight:500; margin:0; color:var(--brown-dark); }
+  .card-name{ font-size:0.98rem; font-weight:400; margin:0; color:var(--brown-dark); }
   .card-price, .ph-head-price, .lb-price, .price, .price-num{
-    font-family: Georgia, 'Times New Roman', serif;
-    font-variant-numeric: lining-nums tabular-nums;
-    font-feature-settings:"lnum" 1, "tnum" 1;
+    font-family: var(--font);
+    font-weight:600;
   }
-  .card-price{ margin-top:6px; color:var(--brown-mid); font-size:1.35rem; }
+  .card-price{ margin-top:6px; color:var(--brown-mid); font-size:1.1rem; }
 
   .card-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:16px; }
   .grid-message{
@@ -205,7 +210,7 @@
     text-align:center;
     color:var(--brown-mid);
     padding:60px 10px;
-    font-size:1.1rem;
+    font-size:0.95rem;
   }
   .badge-soldout{
     position:absolute; top:10px; left:10px;
@@ -215,13 +220,12 @@
   }
   .unavailable-label{
     color:var(--brown-mid);
-    font-size:0.92rem;
-    font-style:italic;
+    font-size:0.85rem;
   }
   .btn{
     border:1px solid var(--brown-dark);
     padding:12px 20px;
-    font-size:1rem;
+    font-size:0.9rem;
     letter-spacing:0.02em;
     cursor:pointer;
     transition:background .2s ease, color .2s ease, opacity .2s ease;
@@ -285,8 +289,8 @@
   .lb-image-wrap{ position:relative; }
   .lightbox-panel .lb-nav-wrap{ position:relative; max-width:420px; margin:0 auto; }
 
-  .lb-name{ text-align:center; margin-top:20px; font-size:1.4rem; font-weight:500; }
-  .lb-price{ text-align:center; color:var(--brown-mid); margin-top:4px; font-size:1.35rem; }
+  .lb-name{ text-align:center; margin-top:20px; font-size:1.15rem; font-weight:400; }
+  .lb-price{ text-align:center; color:var(--brown-mid); margin-top:4px; font-size:1.1rem; }
   .lb-actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:20px; }
 
   /* ---------- PURCHASE MODAL ---------- */
@@ -300,30 +304,30 @@
   .purchase-panel .close-x{ color:var(--brown-dark); }
   .ph-head{ display:flex; gap:16px; align-items:center; }
   .ph-head img{ width:76px; height:76px; object-fit:cover; border:1px solid var(--line); }
-  .ph-head-name{ font-size:1.25rem; font-weight:500; }
-  .ph-head-price{ color:var(--brown-mid); font-size:1.35rem; margin-top:4px; }
+  .ph-head-name{ font-size:1.05rem; font-weight:500; }
+  .ph-head-price{ color:var(--brown-mid); font-size:1.1rem; margin-top:4px; }
 
   .field{ margin-top:24px; }
-  .field label{ display:block; font-size:1.08rem; font-weight:600; letter-spacing:0.02em; color:var(--brown-dark); margin-bottom:9px; }
+  .field label{ display:block; font-size:0.9rem; font-weight:600; letter-spacing:0.01em; color:var(--brown-dark); margin-bottom:9px; }
   .swatches{ display:flex; flex-wrap:wrap; gap:10px; }
   .swatch{
     padding:9px 16px; border:1px solid var(--line); background:var(--white);
-    cursor:pointer; font-size:1rem; color:var(--brown-dark);
+    cursor:pointer; font-size:0.9rem; color:var(--brown-dark);
   }
   .swatch.selected{ border-color:var(--brown-dark); background:var(--greige); }
   select.size-select{
     width:100%; padding:12px 12px; border:1px solid var(--line);
-    background:var(--white); color:var(--brown-dark); font-family:inherit; font-size:1.05rem;
+    background:var(--white); color:var(--brown-dark); font-family:inherit; font-size:0.92rem;
   }
   .text-input{
     width:100%; padding:12px 12px; border:1px solid var(--line);
-    background:var(--white); color:var(--brown-dark); font-family:inherit; font-size:1.05rem;
+    background:var(--white); color:var(--brown-dark); font-family:inherit; font-size:0.92rem;
   }
   .text-input:focus, select.size-select:focus{ outline:1px solid var(--tan); }
   .order-summary{ margin:4px 0 22px; }
   .order-line{
     display:flex; justify-content:space-between; gap:10px;
-    font-size:1.05rem; padding:9px 0; border-bottom:1px solid var(--line);
+    font-size:0.92rem; padding:9px 0; border-bottom:1px solid var(--line);
   }
   .order-line .price, .order-total-row .price{
     flex-shrink:0; white-space:nowrap; text-align:right;
@@ -331,17 +335,17 @@
   }
   .order-total-row{
     display:flex; justify-content:space-between;
-    margin-top:10px; font-size:1.3rem; font-weight:600;
+    margin-top:10px; font-size:1.1rem; font-weight:600;
   }
   .form-error{
     margin-top:16px; padding:10px 12px;
     background:rgba(183,159,123,0.25);
-    color:var(--brown-dark); font-size:0.98rem;
+    color:var(--brown-dark); font-size:0.88rem;
   }
   .qty-stepper{ display:flex; align-items:center; gap:14px; }
   .qty-stepper button{
     width:32px; height:32px; border:1px solid var(--line); background:var(--white);
-    cursor:pointer; font-size:1rem; color:var(--brown-dark);
+    cursor:pointer; font-size:0.9rem; color:var(--brown-dark);
   }
   .qty-value{ min-width:20px; text-align:center; }
 
@@ -370,13 +374,13 @@
     display:flex; align-items:center; justify-content:space-between;
     padding:22px 22px 16px; border-bottom:1px solid var(--line);
   }
-  .cart-drawer-head h2{ font-size:1.4rem; margin:0; font-weight:500; }
+  .cart-drawer-head h2{ font-size:1.15rem; margin:0; font-weight:500; }
   .cart-items{ flex:1; overflow-y:auto; padding:12px 22px; }
   .cart-item{
     display:flex; gap:12px; padding:16px 0; border-bottom:1px solid var(--line);
   }
   .cart-item img{ width:64px; height:64px; object-fit:cover; border:1px solid var(--line); }
-  .ci-name{ font-size:1rem; font-weight:500; }
+  .ci-name{ font-size:0.9rem; font-weight:500; }
   .ci-opts{ font-size:0.78rem; color:var(--brown-mid); margin-top:2px; }
   .ci-row{ display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
   .ci-qty{ display:flex; align-items:center; gap:8px; font-size:0.85rem; }
@@ -385,7 +389,7 @@
   .cart-empty{ text-align:center; color:var(--brown-mid); padding:60px 10px; font-size:0.95rem; }
 
   .cart-drawer-foot{ padding:18px 22px 24px; border-top:1px solid var(--line); }
-  .cart-total-row{ display:flex; justify-content:space-between; margin-bottom:14px; font-size:1.05rem; }
+  .cart-total-row{ display:flex; justify-content:space-between; margin-bottom:14px; font-size:0.92rem; }
   .cart-drawer-foot .btn{ width:100%; margin-top:8px; }
 
   /* ---------- TOAST ---------- */
@@ -1031,8 +1035,8 @@ function renderPurchaseFinal(){
   const total = order.reduce((s, i) => s + i.price * i.qty, 0);
 
   purchaseBody.innerHTML = `
-    <h3 class="serif" style="margin:0 0 6px; font-size:1.6rem;">Finalizar pedido</h3>
-    <p style="color:var(--brown-dark); font-size:1rem; margin:0 0 18px; opacity:0.85;">Confirme seus dados — o pedido será enviado para o nosso WhatsApp.</p>
+    <h3 class="serif" style="margin:0 0 6px; font-size:1.3rem;">Finalizar pedido</h3>
+    <p style="color:var(--brown-dark); font-size:0.92rem; margin:0 0 18px; opacity:0.85;">Confirme seus dados — o pedido será enviado para o nosso WhatsApp.</p>
 
     <div class="order-summary">
       ${order.map(item => {
@@ -1078,7 +1082,7 @@ function renderPurchaseFinal(){
       <input type="text" class="text-input" id="fieldEndereco" value="${customer.endereco}" placeholder="Rua, número, bairro, cidade">
     </div>` : `
     <div class="field">
-      <p style="color:var(--brown-mid); font-size:0.98rem; margin:0;">Retirada no local — endereço não é necessário.</p>
+      <p style="color:var(--brown-mid); font-size:0.88rem; margin:0;">Retirada no local — endereço não é necessário.</p>
     </div>`}
 
     ${error ? `<div class="form-error">${error}</div>` : ''}
@@ -1175,7 +1179,7 @@ function renderPurchaseDone(){
     <div class="confirm-view">
       <div class="ico">&#10003;</div>
       <h3 class="serif" style="margin:0 0 8px;">Pedido enviado</h3>
-      <p style="color:var(--brown-mid); font-size:0.92rem;">Abrimos o WhatsApp com os dados do seu pedido — é só confirmar por lá com a gente.</p>
+      <p style="color:var(--brown-mid); font-size:0.85rem;">Abrimos o WhatsApp com os dados do seu pedido — é só confirmar por lá com a gente.</p>
       <button class="btn btn-solid" id="checkoutBackBtn" style="margin-top:20px;">Voltar aos produtos</button>
     </div>
   `;
