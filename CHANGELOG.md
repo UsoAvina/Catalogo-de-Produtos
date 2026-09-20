@@ -7,6 +7,20 @@ descrição da mudança.
 
 ---
 
+**V20** — Corrigido bug no campo "Celular para contato": ao digitar, o
+cursor não era reposicionado após a formatação automática, fazendo alguns
+celulares selecionarem parte do número digitado — se a pessoa continuasse
+digitando, essa parte selecionada era sobrescrita, corrompendo o número
+final enviado no pedido. Agora o cursor é mantido na posição correta a
+cada tecla digitada.
+
+**V19** — Ajustes de tipografia em todo o site: peso da fonte aumentado
+(Cormorant Garamond ficava fina/apagada) para todo o texto, inputs, selects
+e botões; algarismos padronizados para "lining nums" tabulares em todo o
+site, corrigindo o desalinhamento visual dos números causado pelos
+algarismos old-style da fonte; texto de apoio "Confirme seus dados..." da
+tela de checkout escurecido para melhor destaque.
+
 **V18** — Ajustes na tela de "Finalizar pedido" e na mensagem do WhatsApp:
 mensagem agora começa direto na saudação (sem linha de título); marcador
 "▪" (que ainda dava erro em alguns aparelhos) trocado por "➤"; linha em
