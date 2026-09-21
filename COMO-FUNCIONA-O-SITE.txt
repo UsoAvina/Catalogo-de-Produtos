@@ -1,0 +1,861 @@
+==============================================================================
+  SITE AVINA — CATÁLOGO DE SEMIJOIAS
+  Documentação completa de funcionamento
+  Versão do site descrita: V26 (20/09/2026)
+==============================================================================
+
+Este documento explica, em detalhes, como o site da Avina funciona: o que
+cada arquivo faz, como os produtos aparecem, como o carrinho e o pedido por
+WhatsApp funcionam, como editar cada parte e quais são os cuidados
+necessários. Foi escrito para quem vai manter o site, mesmo sem experiência
+com programação.
+
+
+------------------------------------------------------------------------------
+SUMÁRIO
+------------------------------------------------------------------------------
+  1.  Visão geral
+  2.  Arquivos do projeto
+  3.  Como o site é publicado e aberto
+  4.  Tecnologias e dependências externas
+  5.  Identidade visual (cores, fonte, tamanhos)
+  6.  A página de cima para baixo (mapa da tela)
+  7.  Cabeçalho, faixa marrom e menu lateral
+  8.  Mensagem da marca
+  9.  O catálogo de produtos (produtos.csv)
+  10. As fotos dos produtos (pasta fotos/)
+  11. Categorias e prefixos das tags
+  12. Os cartões de produto
+  13. Zoom de fotos (lightbox)
+  14. Modal de compra (Comprar / Adicionar ao Carrinho)
+  15. Carrinho lateral
+  16. Finalizar pedido e mensagem do WhatsApp
+  17. Seção de contatos (rodapé)
+  18. Comportamentos gerais (fechar janelas, teclado, aviso)
+  19. Responsividade (celular, tablet, computador)
+  20. Ícone do app e favicon (manifest.json)
+  21. Configurações que você pode alterar no código
+  22. Passo a passo: tarefas do dia a dia
+  23. Controle de versões (CHANGELOG)
+  24. Limitações e pontos de atenção (LEIA)
+  25. Perguntas frequentes
+
+
+==============================================================================
+1. VISÃO GERAL
+==============================================================================
+
+O site da Avina é um catálogo online de semijoias, estilo "revista", com:
+
+  - Lista de produtos em cartões, com fotos, nome e preço;
+  - Menu lateral para filtrar por categoria (Brinco, Colar, Choker...);
+  - Zoom nas fotos, com várias fotos por produto;
+  - Escolha de acabamento (Dourado, Prata, Ouro Rosé), tamanho e quantidade;
+  - Carrinho de compras lateral;
+  - Finalização do pedido: o cliente preenche os dados e o pedido é enviado,
+    já formatado, para o WhatsApp da loja;
+  - Mensagem da marca no topo e seção de contatos no final
+    (WhatsApp, Instagram e e-mail).
+
+IMPORTANTE: o site NÃO processa pagamento, NÃO controla estoque e NÃO tem
+banco de dados. O "pedido" é apenas uma mensagem de WhatsApp pronta, que
+a loja recebe e confirma manualmente com a cliente. Todo o catálogo é
+controlado por um arquivo de planilha simples (produtos.csv) e por uma
+pasta de fotos.
+
+
+==============================================================================
+2. ARQUIVOS DO PROJETO
+==============================================================================
+
+  Catalogo-de-Produtos-main/
+  |
+  |-- index.html         O site inteiro (visual + funcionamento) em um único
+  |                      arquivo. Contém HTML (estrutura), CSS (visual) e
+  |                      JavaScript (comportamento).
+  |
+  |-- produtos.csv       A "planilha" de produtos: tag, nome, preço,
+  |                      disponibilidade, acabamentos e tamanhos.
+  |
+  |-- fotos/             Pasta com as fotos dos produtos. O nome de cada foto
+  |                      precisa seguir um padrão (ver seção 10).
+  |
+  |-- manifest.json      Informações do "app" (nome, cores, ícones) para quem
+  |                      adiciona o site à tela inicial do celular.
+  |
+  |-- CHANGELOG.md       Histórico de todas as versões e mudanças do site.
+  |
+  |-- README.md          Arquivo quase vazio do repositório (só o título).
+  |
+  |-- fotos/desktop.ini  Arquivo automático do Windows/Google Drive. Não tem
+                         função no site e pode ser ignorado (ou apagado).
+
+Observação: o CHANGELOG cita um guia "COMO-ATUALIZAR-PRODUTOS.md" que não
+está neste repositório. Este documento (e a seção 22) o substitui.
+
+A logo, o favicon e os ícones do app estão "embutidos" dentro do próprio
+código (em base64), por isso não existem como arquivos de imagem separados.
+
+
+==============================================================================
+3. COMO O SITE É PUBLICADO E ABERTO
+==============================================================================
+
+O site é "estático": só precisa de um lugar que entregue os arquivos
+(por exemplo GitHub Pages, Netlify, Vercel ou qualquer hospedagem simples).
+Não existe servidor próprio nem banco de dados.
+
+MUITO IMPORTANTE — abrir o arquivo direto no computador:
+  Se você der dois cliques no index.html (endereço começando com file://),
+  o navegador BLOQUEIA a leitura do produtos.csv e das fotos. Nesse caso o
+  site mostra automaticamente um CATÁLOGO DE EXEMPLO (15 produtos fictícios,
+  com ilustrações simples), e não os produtos reais. Isso NÃO é um erro do
+  site: é um recurso de segurança do navegador.
+
+  O mesmo catálogo de exemplo aparece se o produtos.csv não for encontrado
+  ou estiver sem nenhuma linha de produto.
+
+  Para ver os produtos reais é necessário abrir o site por um endereço
+  http/https, ou seja, publicado (GitHub Pages, etc.) ou rodando em um
+  servidor local.
+
+Quando o site é atualizado no GitHub Pages, pode levar de alguns segundos a
+poucos minutos para a versão nova aparecer. Se ainda aparecer a versão
+antiga, recarregue a página forçando a atualização (no computador:
+Ctrl + Shift + R; no celular: feche e reabra a aba).
+
+
+==============================================================================
+4. TECNOLOGIAS E DEPENDÊNCIAS EXTERNAS
+==============================================================================
+
+  - HTML, CSS e JavaScript puros. Não usa frameworks (nem React, nem jQuery).
+  - Única dependência externa: a fonte MONTSERRAT, carregada do Google Fonts
+    (pesos 400, 500, 600 e 700). Se o cliente estiver sem internet ou o
+    Google Fonts falhar, o site usa uma fonte de reserva (Helvetica Neue /
+    Arial), sem quebrar.
+  - Os links de WhatsApp usam o serviço oficial wa.me.
+  - Não há cookies, rastreadores, nem envio de dados para servidores da
+    Avina. Os dados digitados pela cliente só saem do aparelho dela dentro
+    da mensagem de WhatsApp que ela mesma envia.
+
+
+==============================================================================
+5. IDENTIDADE VISUAL
+==============================================================================
+
+PALETA (definida no início do CSS, na área ":root"):
+
+  --brown-dark  #523f31   Marrom escuro: textos, botões principais, faixa
+                          marrom, seção de contatos.
+  --brown-mid   #856f56   Marrom médio: preços, textos secundários.
+  --tan         #b79f7b   Dourado/areia: ornamentos (linha + losango).
+  --greige      #c6bdae   Cinza-bege: detalhes e fundos de fotos provisórias.
+  --cream       #faf6f0   Creme: fundo geral do site.
+  --white       #fffdfb   Branco quente: cartões, campos e botões claros.
+  --line        marrom com 18% de opacidade: linhas divisórias finas.
+
+FONTE (variável --font no :root):
+  'Montserrat', 'Helvetica Neue', Arial, sans-serif
+  Para trocar a fonte do site inteiro, basta alterar essa única linha e o
+  link do Google Fonts no <head>. Pesos usados: 400 (texto e nomes de
+  produto), 500 (títulos e filtros), 600 (preços, rótulos, destaques).
+
+TAMANHOS:
+  Os textos usam a unidade "rem" (1rem = tamanho padrão do navegador, em
+  geral 16px). Exemplos: nome do produto 0.98rem; preço 1.1rem; botões
+  0.9rem; o título da mensagem da marca se ajusta sozinho entre 1.3rem e
+  1.95rem conforme a largura da tela.
+
+ESTILO GERAL:
+  Visual sóbrio e elegante: cantos retos, linhas finas, bastante espaço em
+  branco, botões retangulares (cheio em marrom para a ação principal,
+  apenas contorno para a secundária).
+
+
+==============================================================================
+6. A PÁGINA DE CIMA PARA BAIXO (MAPA DA TELA)
+==============================================================================
+
+  +----------------------------------------------------+
+  |  [≡]               A V I N A              [carrinho]|  <- Cabeçalho
+  +====================================================+  <- Faixa marrom fina
+  |                                                    |
+  |            ---- ◇ ----                             |
+  |   Por que esperar por um grande evento...?         |  <- Mensagem da marca
+  |   A Avina existe para que você celebre...          |     (fundo areia)
+  |   Não existe hora marcada para se amar.            |
+  |            ---- ◇ ----                             |
+  +----------------------------------------------------+
+  |                                                    |
+  |   [cartão]   [cartão]   [cartão]                   |  <- Grade de produtos
+  |   [cartão]   [cartão]   [cartão]                   |     (3 colunas no PC)
+  |                                                    |
+  +----------------------------------------------------+
+  |            ---- ◇ ----                             |
+  |              Fale com a Avina                      |  <- Contatos
+  |    [WhatsApp]   [Instagram]   [E-mail]             |     (fundo marrom)
+  +----------------------------------------------------+
+
+Janelas que aparecem POR CIMA da página quando acionadas:
+  - Menu lateral (desliza da esquerda);
+  - Carrinho lateral (desliza da direita);
+  - Zoom de fotos (lightbox, centralizado);
+  - Modal de compra / finalizar pedido (centralizado);
+  - Aviso rápido ("Item adicionado ao carrinho") no canto inferior direito.
+
+
+==============================================================================
+7. CABEÇALHO, FAIXA MARROM E MENU LATERAL
+==============================================================================
+
+CABEÇALHO
+  - Fica FIXO no topo: acompanha a rolagem da página.
+  - Esquerda: botão com três riscos horizontais (abre o menu lateral).
+  - Centro: logo da Avina (imagem embutida no código).
+  - Direita: ícone do carrinho. Quando há itens no carrinho, aparece uma
+    bolinha marrom com a QUANTIDADE TOTAL de peças (soma das quantidades,
+    não o número de produtos diferentes).
+
+FAIXA MARROM FINA
+  - Faixa de 8px de altura, colada logo abaixo do cabeçalho. É puramente
+    decorativa e também acompanha a rolagem (faz parte do cabeçalho fixo).
+  - Antes da versão V23 ali ficava uma faixa larga de filtros; os filtros
+    agora estão dentro do menu lateral.
+
+MENU LATERAL (abre pelos três riscos)
+  - Desliza da esquerda, com um fundo escurecido sobre o resto do site.
+  - Bloco "PRODUTOS": lista as categorias (Geral, Brinco, Colar, Choker,
+    Pulseiras e braceletes, Anel, Conjuntos). A categoria atual aparece
+    destacada. Ao escolher uma:
+       1) o catálogo é filtrado para mostrar só aquela categoria;
+       2) o menu fecha sozinho;
+       3) a página rola suavemente para o topo.
+  - Rodapé do menu, com dois botões:
+       "Sobre nós"  -> fecha o menu e rola até a mensagem da marca.
+       "Contatos"   -> fecha o menu e rola até a seção "Fale com a Avina".
+    A rolagem desconta a altura do cabeçalho fixo, para o título da seção
+    não ficar escondido atrás dele.
+  - Formas de fechar o menu: botão X, clicar na área escura fora do menu,
+    tecla ESC, ou escolher um item.
+
+TÍTULO DA CATEGORIA
+  - Acima dos produtos existe um título que mostra o nome da categoria
+    escolhida (ex.: "Choker"). Na visão "Geral" o título fica OCULTO
+    (mudança da V25).
+
+
+==============================================================================
+8. MENSAGEM DA MARCA
+==============================================================================
+
+Seção de destaque no topo (abaixo do cabeçalho), com:
+  - Fundo em degradê suave de areia, com linha fina embaixo;
+  - Ornamento: linha dourada + losango + linha dourada (em cima e embaixo);
+  - Título grande: "Por que esperar por um grande evento se o seu hoje
+    já é especial?"
+  - Parágrafo de apoio sobre a marca;
+  - Frase final em negrito: "Não existe hora marcada para se amar."
+
+Para alterar o texto: no index.html, procure por  class="brand-message"
+(começa em <section class="brand-message" id="sobre" ...>) e edite os textos
+dentro das tags <h2 class="bm-title">, <p class="bm-text"> e
+<p class="bm-closing">. O botão "Sobre nós" leva a essa seção pelo id
+"sobre" — não remova esse id.
+
+
+==============================================================================
+9. O CATÁLOGO DE PRODUTOS (produtos.csv)
+==============================================================================
+
+O catálogo inteiro vem do arquivo produtos.csv. Cada LINHA é um produto.
+O separador de colunas é PONTO E VÍRGULA (;) — não vírgula.
+
+CABEÇALHO (primeira linha, obrigatório e nesta grafia):
+
+  tag;nome;preco;disponivel;acabamentos;tamanhos
+
+CONTEÚDO ATUAL:
+
+  tag      nome                   preco  disponivel acabamentos    tamanhos
+  ANL-001  Anel Regulável Nara    58.99  sim        Dourado,Prata  15,16,17
+  CHK-001  Choker Trevinho Mini   69.99  sim        Dourado,Prata  28,30,32
+  CHK-002  Choker Trevinho Mini   69.99  sim        Dourado,Prata  28,30,32
+
+COLUNA A COLUNA:
+
+  tag
+    Código único do produto no formato PREFIXO-NÚMERO (ex.: CHK-001).
+    Faz TRÊS coisas: (1) define a categoria pelo prefixo (seção 11);
+    (2) liga o produto às fotos com o mesmo código (seção 10);
+    (3) serve de "nome interno" do produto. Escreva sempre em MAIÚSCULAS
+    (o site converte, mas mantenha o padrão). Não repita tags.
+
+  nome
+    Nome exibido à cliente no cartão, no zoom, no carrinho e na mensagem
+    do WhatsApp. Se ficar vazio, o site mostra a própria tag.
+
+  preco
+    Valor em reais, apenas números. Pode usar ponto (69.99) ou vírgula
+    (69,99) — ambos funcionam. NÃO escreva "R$" nem separador de milhar
+    (escreva 1250.00, não 1.250,00). Se estiver vazio ou inválido, o preço
+    vira 0. O site exibe sempre no formato brasileiro: R$ 69,99.
+
+  disponivel
+    "sim" ou "nao". Aceita também "não" com acento, "n", "0" ou "false"
+    para indisponível. Se a célula ficar vazia, considera-se DISPONÍVEL.
+    Produto indisponível continua aparecendo, mas com o selo "Esgotado"
+    sobre a foto e o texto "Produto indisponível no momento" no lugar dos
+    botões de compra.
+
+  acabamentos
+    Lista separada por VÍRGULA: Dourado,Prata,Ouro Rosé
+    São as opções que a cliente poderá escolher. Se a coluna ficar vazia, o
+    site oferece os três acabamentos padrão (Dourado, Prata, Ouro Rosé).
+    (O nome do acabamento é apenas um texto — pode escrever outros, como
+    "Ródio", e ele aparecerá normalmente na escolha e no pedido.)
+
+  tamanhos
+    Lista separada por VÍRGULA (ex.: 15,16,17 ou P,M,G). Se preenchida,
+    aparece um seletor de tamanho na hora da compra. Se vazia, o produto
+    não pede tamanho. O rótulo do seletor é "Numeração" para anéis e
+    "Tamanho" para as demais categorias.
+
+REGRAS TÉCNICAS DO ARQUIVO:
+  - Salve em UTF-8 (para os acentos aparecerem corretamente).
+  - Linhas em branco são ignoradas.
+  - Não use ponto e vírgula dentro dos textos (ele separa as colunas).
+  - Ao editar no Excel/Google Planilhas, exporte como CSV e confira, abrindo
+    no Bloco de Notas, se o separador é o ponto e vírgula (;).
+  - A ORDEM das linhas é a ordem em que os produtos aparecem no site.
+  - O site lê o CSV sem usar cache: mudou o arquivo, a próxima visita já
+    mostra os dados novos.
+
+
+==============================================================================
+10. AS FOTOS DOS PRODUTOS (pasta fotos/)
+==============================================================================
+
+As fotos NÃO são listadas no CSV: o site as DESCOBRE sozinho pelo nome do
+arquivo, usando a tag do produto.
+
+PADRÃO DE NOME:   TAG-NÚMERO.extensão
+
+  Exemplos para o produto CHK-001:
+     fotos/CHK-001-1.webp   (1ª foto — a que aparece no cartão)
+     fotos/CHK-001-2.webp   (2ª foto)
+     fotos/CHK-001-3.jpg    (3ª foto)
+
+COMO A BUSCA FUNCIONA:
+  1. O site procura a foto número 1 tentando, nesta ordem, as extensões:
+     jpg, jpeg, png, webp.
+  2. Se achou, procura a número 2, depois a 3, e assim por diante.
+  3. PARA no primeiro número que não existir. Ou seja: as numerações
+     precisam ser sequenciais. Se existir -1 e -3, mas não -2, a foto -3 é
+     ignorada.
+  4. Limite de 8 fotos por produto.
+  5. Cada foto pode ter uma extensão diferente das outras.
+  6. Atenção a MAIÚSCULAS/minúsculas: em servidores como o GitHub Pages,
+     "chk-001-1.webp" e "CHK-001-1.webp" são arquivos diferentes. Use
+     sempre a tag em MAIÚSCULAS no nome do arquivo, igual ao CSV.
+
+QUANTAS FOTOS = QUANTAS BOLINHAS:
+  Abaixo da foto do cartão aparece uma bolinha para cada foto encontrada.
+  Clicar numa bolinha troca a foto exibida no cartão.
+
+PRODUTO SEM FOTO:
+  Se nenhuma foto for encontrada, o site mostra 3 ilustrações provisórias
+  (um desenho simples do tipo de joia, em fundo de degradê), para o
+  produto não ficar em branco. Só existem desenhos para as categorias:
+  brinco, colar, choker, pulseira, anel e conjunto. Para tags com prefixo
+  desconhecido (categoria "outro") o fundo aparece VAZIO, sem desenho
+  (ver seção 24, item 1).
+
+RECOMENDAÇÕES PARA AS FOTOS:
+  - Formato .webp ou .jpg, leves (idealmente abaixo de 300 KB cada).
+  - O cartão exibe a foto em proporção vertical (1 : 1,15), recortando as
+    sobras para preencher a área. Prefira fotos quadradas ou levemente
+    verticais, com o produto no centro.
+  - A foto número 1 também é a miniatura usada no carrinho e na janela de
+    compra.
+
+
+==============================================================================
+11. CATEGORIAS E PREFIXOS DAS TAGS
+==============================================================================
+
+A categoria de cada produto é definida pelas letras da tag que vêm ANTES do
+hífen (o "prefixo"). O mapa está no código (CATEGORY_BY_PREFIX):
+
+  Prefixo   Categoria (chave)   Aparece no menu como
+  -------   -----------------   ---------------------------
+  BRI       brinco              Brinco
+  COL       colar               Colar
+  CHK       choker              Choker
+  PUL       pulseira            Pulseiras e braceletes
+  ANE       anel                Anel
+  CJT       conjunto            Conjuntos
+
+O item "Geral" do menu mostra TODOS os produtos, de qualquer categoria.
+
+Se a tag tiver um prefixo que não está nessa lista (por exemplo "ANL"), o
+produto recebe a categoria "outro": ele aparece em "Geral", mas NÃO aparece
+em nenhuma categoria do menu e não tem ilustração provisória.
+
+COMO CRIAR UMA CATEGORIA NOVA (ex.: "Tornozeleira", prefixo TOR):
+  1. No index.html, na lista CATEGORIES, adicione:
+        { key:'tornozeleira', label:'Tornozeleiras' },
+  2. No mapa CATEGORY_BY_PREFIX, adicione:
+        TOR: 'tornozeleira',
+  3. Use tags como TOR-001 no produtos.csv e fotos TOR-001-1.webp.
+  (Opcional: para ter ilustração provisória própria, é preciso adicionar um
+  desenho na função productSVG.)
+
+
+==============================================================================
+12. OS CARTÕES DE PRODUTO
+==============================================================================
+
+Cada produto vira um cartão com borda fina, e a grade se ajusta à tela:
+  - Computador: 3 colunas.
+  - Tablet (até 900px de largura): 2 colunas.
+  - Celular (até 560px): 1 coluna.
+
+CONTEÚDO DO CARTÃO (de cima para baixo):
+  1. Foto (proporção vertical). Ao passar o mouse, a foto amplia levemente.
+     Clicar na foto abre o ZOOM (seção 13).
+  2. Bolinhas de navegação das fotos (uma por foto).
+  3. Nome do produto e preço (R$ 00,00).
+  4. Botões: "Comprar" (marrom cheio) e "Adicionar ao Carrinho" (contorno).
+     Se o produto estiver indisponível: selo "Esgotado" na foto e o texto
+     "Produto indisponível no momento" no lugar dos botões.
+
+ESTADOS DA LISTA:
+  - "Carregando produtos..." enquanto o CSV e as fotos são lidos.
+  - "Nenhum produto encontrado nessa categoria." quando a categoria
+    escolhida não tem nenhum produto.
+
+O site lembra, durante a visita, qual foto cada cartão estava exibindo.
+Isso é mantido ao trocar de categoria, mas volta ao início se a página for
+recarregada.
+
+
+==============================================================================
+13. ZOOM DE FOTOS (LIGHTBOX)
+==============================================================================
+
+Abre ao clicar na foto de um cartão. Mostra a foto grande, sobre um fundo
+escurecido, com:
+  - Setas esquerda/direita para passar entre as fotos do produto (a
+    navegação é circular: depois da última volta para a primeira);
+  - Bolinhas indicando a foto atual (clicáveis);
+  - Clique na própria foto: alterna o ZOOM 2x (clicar de novo volta ao
+    normal). Ao trocar de foto o zoom é desligado;
+  - Nome e preço do produto;
+  - Botões "Comprar" e "Adicionar ao Carrinho" (fecham o zoom e abrem o
+    modal de compra);
+  - Fechar: botão X, clicar fora da janela ou tecla ESC.
+
+
+==============================================================================
+14. MODAL DE COMPRA (COMPRAR / ADICIONAR AO CARRINHO)
+==============================================================================
+
+É a janela onde a cliente escolhe as opções da peça. Existem DOIS caminhos,
+que começam iguais:
+
+ETAPA 1 — ESCOLHER OPÇÕES
+  Mostra miniatura, nome e preço, e:
+   - ACABAMENTO: botões com as opções do CSV (o primeiro vem selecionado);
+   - TAMANHO/NUMERAÇÃO: lista suspensa (só aparece se o CSV tiver tamanhos;
+     o primeiro vem selecionado);
+   - QUANTIDADE: botões − e +, mínimo 1.
+  O botão final depende do caminho:
+
+  CAMINHO A — botão "Comprar" do cartão:
+     botão "Continuar" -> monta um pedido com essa única peça e vai para a
+     Etapa 2 (finalizar pedido, seção 16).
+
+  CAMINHO B — botão "Adicionar ao Carrinho":
+     botão "Adicionar ao Carrinho" -> coloca a peça no carrinho, fecha a
+     janela e mostra o aviso "Item adicionado ao carrinho. Toque para ver."
+     (clicar no aviso abre o carrinho; ele some sozinho em ~4,5 segundos).
+
+
+==============================================================================
+15. CARRINHO LATERAL
+==============================================================================
+
+Abre ao clicar no ícone do carrinho (desliza da direita; no celular ocupa a
+tela inteira).
+
+  - Cada item mostra: foto, nome, acabamento e tamanho, quantidade com
+    botões − e +, subtotal do item e o link "Remover".
+  - Diminuir a quantidade até zero remove o item.
+  - Se a cliente adicionar de novo a MESMA peça com o MESMO acabamento e
+    o MESMO tamanho, o site soma a quantidade em vez de criar outra linha.
+    Se mudar acabamento ou tamanho, vira uma linha separada.
+  - Rodapé: total geral e dois botões:
+       "Finalizar Compra"            -> vai para "Finalizar pedido"
+                                        com todos os itens do carrinho;
+       "Continuar Vendo Produtos"    -> fecha o carrinho.
+  - Carrinho vazio mostra uma mensagem convidando a explorar o catálogo.
+
+ATENÇÃO: o carrinho vive apenas na memória da página. Se a cliente
+recarregar ou fechar o site, o carrinho é ESVAZIADO (não há gravação no
+aparelho nem no servidor).
+
+
+==============================================================================
+16. FINALIZAR PEDIDO E MENSAGEM DO WHATSAPP
+==============================================================================
+
+ETAPA 2 — "FINALIZAR PEDIDO" (janela única, tanto vindo de "Comprar" quanto
+do carrinho)
+
+Mostra o RESUMO: cada linha com quantidade, nome, acabamento/tamanho e
+valor, mais o TOTAL. Depois, os campos:
+
+  - Nome do cliente ............ texto livre (obrigatório);
+  - Forma de pagamento ......... lista: Pix, Cartão de Crédito, Cartão de
+                                 Débito, Dinheiro (padrão: Pix);
+  - Forma de entrega ........... dois botões: "Retirar no Local" (padrão)
+                                 ou "Entregar via aplicativo 99";
+  - Celular para contato ....... formatado automaticamente enquanto digita
+                                 no padrão (31) 99999-9999 (obrigatório);
+  - Endereço ................... só aparece (e é obrigatório) se a entrega
+                                 for pelo aplicativo 99. Na retirada
+                                 aparece o aviso "Retirada no local —
+                                 endereço não é necessário".
+
+VALIDAÇÃO:
+  Ao clicar em "Enviar Pedido pelo WhatsApp", se faltar nome, celular (ou
+  endereço, quando aplicável), aparece a mensagem de erro "Preencha nome,
+  celular [e endereço] para continuar." e nada é enviado.
+
+ENVIO:
+  Quando tudo está preenchido, o site monta a mensagem e abre uma nova
+  aba/aplicativo com o link  https://wa.me/NÚMERO?text=MENSAGEM  já com o
+  texto pronto. A cliente só precisa APERTAR ENVIAR no WhatsApp. O pedido
+  só chega à loja depois desse envio manual.
+
+EXEMPLO DA MENSAGEM GERADA:
+
+  Olá! Me chamo *Maria Silva* e gostaria de finalizar o pedido que fiz no site.
+
+  ➤ *Itens do pedido:*
+
+  - 1x *Choker Trevinho Mini* (Dourado - Tam: 30) — R$ 69,99
+  - 2x *Anel Regulável Nara* (Prata - Tam: 16) — R$ 117,98
+
+  ➤ *Total:* R$ 187,97
+
+  ➤ *Forma de pagamento:* Pix
+  ➤ *Forma de entrega:* Entregar via aplicativo 99
+  ➤ *Endereço:* Rua das Flores, 10, Centro, Barão de Cocais
+  ➤ *Celular para contato:* (31) 99999-0000
+
+  (Os asteriscos deixam o texto em negrito no WhatsApp. A linha de
+  Endereço só existe na entrega por aplicativo.)
+
+ETAPA 3 — CONFIRMAÇÃO
+  Mostra "Pedido enviado" com um aviso de que o WhatsApp foi aberto com os
+  dados e basta confirmar lá. Botão "Voltar aos produtos".
+  Se o pedido veio do CARRINHO, o carrinho é esvaziado nesse momento.
+
+NÚMERO DE WHATSAPP DA LOJA:
+  Definido no código, na constante WHATSAPP_NUMBER (atualmente
+  '5531990820145', ou seja, +55 31 99082-0145). Formato: código do país +
+  DDD + número, tudo junto e sem símbolos. Esse mesmo número é usado no
+  botão de WhatsApp da seção de contatos.
+
+
+==============================================================================
+17. SEÇÃO DE CONTATOS (RODAPÉ)
+==============================================================================
+
+Bloco de fundo marrom no final do site, com o título "Fale com a Avina", uma
+frase de apoio e três botões:
+
+  WhatsApp  (botão claro, em destaque)
+     Abre uma conversa com o número da constante WHATSAPP_NUMBER, com a
+     mensagem pronta: "Olá! Vim pelo site da Avina e gostaria de mais
+     informações."
+
+  Instagram (botão com contorno)
+     Abre o perfil https://www.instagram.com/usoavina/ (@usoavina) em nova
+     aba.
+
+  E-mail    (botão com contorno)
+     Abre o programa de e-mail da cliente para escrever para
+     usoavina@gmail.com.
+
+Ao passar o mouse, os botões de contorno se preenchem de branco. No celular
+os três ficam empilhados; no computador ficam lado a lado.
+
+O botão "Contatos" do menu lateral leva até esta seção (id "contatos").
+Para trocar um contato, procure  class="contact-buttons"  no index.html e
+altere o endereço (href) do botão correspondente. O botão de WhatsApp
+recebe seu link pelo JavaScript (busca WHATSAPP_NUMBER), então, para mudar o
+número, basta alterar a constante.
+
+
+==============================================================================
+18. COMPORTAMENTOS GERAIS
+==============================================================================
+
+FECHAR JANELAS
+  - Tecla ESC fecha, de uma vez: zoom, modal de compra, carrinho e menu.
+  - Clicar na área escura fora da janela fecha: zoom, modal de compra,
+    carrinho e menu lateral.
+  - Todas têm botão X (o modal de compra fecha também em "Voltar aos
+    produtos" no fim do pedido).
+
+ROLAGEM SUAVE
+  A rolagem dos botões do menu e a volta ao topo são animadas (suaves).
+
+AVISO RÁPIDO (TOAST)
+  Pequena caixa marrom no canto inferior direito, exibida quando uma peça
+  é adicionada ao carrinho. Clicável: abre o carrinho.
+
+ORDEM DE ABERTURA
+  Ao escolher Comprar/Adicionar no zoom, o zoom fecha antes de abrir o
+  modal de compra; ao finalizar pelo carrinho, o carrinho fecha antes de
+  abrir o pedido.
+
+
+==============================================================================
+19. RESPONSIVIDADE
+==============================================================================
+
+O site se adapta sozinho a qualquer tela:
+
+  - Acima de 900px (computador): 3 colunas de produtos, conteúdo centralizado
+    com largura máxima de 1280px.
+  - Até 900px (tablet): grade de produtos em 2 colunas.
+  - Até 560px (celular): grade em 1 coluna; botões de contato empilhados;
+    espaçamentos menores.
+  - Até 480px (celular pequeno): logo um pouco menor; carrinho ocupa a tela
+    toda; textos da mensagem da marca reduzidos.
+
+Cuidados tomados para o celular: não aparece barra de rolagem horizontal;
+o carrinho escondido não "vaza" sombra na borda da tela (correção da V23);
+textos e botões têm tamanho confortável para toque.
+
+
+==============================================================================
+20. ÍCONE DO APP E FAVICON (manifest.json)
+==============================================================================
+
+  - Favicon: pequenos ícones (16x16 e 32x32) embutidos no <head>; é o
+    ícone que aparece na aba do navegador.
+  - Ícone de tela inicial (iPhone/Android): imagem 180x180 (apple-touch-
+    icon) embutida no <head>.
+  - manifest.json: nome "Avina — Semijoias", nome curto "Avina", modo
+    "standalone" (abre sem as barras do navegador quando adicionado à tela
+    inicial), cor de fundo #faf6f0, cor do tema #523f31 (a barra superior
+    do celular fica marrom) e dois ícones (192x192 e 512x512).
+  - O site não possui "service worker": portanto NÃO funciona offline e não
+    é um PWA completo; apenas pode ser adicionado à tela inicial com o
+    ícone e o nome da marca.
+
+
+==============================================================================
+21. CONFIGURAÇÕES QUE VOCÊ PODE ALTERAR NO CÓDIGO
+==============================================================================
+
+Ficam no início da parte <script> do index.html (bloco "DADOS") ou no
+início do CSS. Edite só o que estiver entre aspas ou após os dois pontos.
+
+  CATEGORIES ............ categorias do menu (chave + nome exibido).
+  FINISHES .............. acabamentos padrão (quando o CSV não informa).
+  FINISH_ACCENT ......... cores usadas nas ilustrações provisórias.
+  WHATSAPP_NUMBER ....... número do WhatsApp da loja (pedidos e contatos).
+  PAYMENT_METHODS ....... opções de pagamento do pedido.
+  DELIVERY_METHODS ...... opções de entrega (chave interna + nome exibido).
+                          ATENÇÃO: a chave 'app99' tem lógica própria (pede
+                          endereço). Alterar só o texto exibido é seguro;
+                          criar novas formas de entrega que exijam endereço
+                          precisa de ajuste no código.
+  CATEGORY_BY_PREFIX .... liga o prefixo da tag à categoria.
+  CSV_FILE .............. nome do arquivo de produtos ('produtos.csv').
+  PHOTOS_FOLDER ......... pasta das fotos ('fotos/').
+  IMAGE_EXTENSIONS ...... extensões de foto aceitas (jpg, jpeg, png, webp).
+  MAX_PHOTOS_PER_PRODUCT  limite de fotos por produto (8).
+  FALLBACK_ROWS ......... catálogo de exemplo (usado só se o CSV não puder
+                          ser lido).
+  --font e cores ........ no CSS, dentro de :root (seção 5).
+
+
+==============================================================================
+22. PASSO A PASSO: TAREFAS DO DIA A DIA
+==============================================================================
+
+ADICIONAR UM PRODUTO NOVO
+  1. Escolha a tag: prefixo da categoria + número (ex.: BRI-004).
+  2. Adicione uma linha ao final do produtos.csv:
+        BRI-004;Brinco Estrela;79.90;sim;Dourado,Prata;
+     (deixe a última coluna vazia se não houver tamanho).
+  3. Coloque as fotos na pasta fotos/ com o nome BRI-004-1.webp,
+     BRI-004-2.webp, etc.
+  4. Envie (commit) os arquivos para o GitHub. Aguarde a publicação.
+
+MUDAR O PREÇO
+  Altere o valor da coluna "preco" da linha do produto.
+
+DEIXAR UM PRODUTO INDISPONÍVEL (ESGOTADO)
+  Troque "sim" por "nao" na coluna "disponivel". Para voltar a vender,
+  volte para "sim".
+
+REMOVER UM PRODUTO
+  Apague a linha do produtos.csv (as fotos podem ficar ou ser apagadas).
+
+TROCAR/ADICIONAR FOTOS
+  Substitua o arquivo mantendo o mesmo nome, ou adicione o próximo número
+  da sequência (ex.: -3). Lembre da regra de sequência sem falhas.
+
+MUDAR O NÚMERO DO WHATSAPP
+  No index.html, altere WHATSAPP_NUMBER (uma única vez atualiza os pedidos e
+  o botão de contato).
+
+MUDAR O TEXTO DA MENSAGEM DA MARCA
+  Ver seção 8.
+
+MUDAR INSTAGRAM / E-MAIL
+  Ver seção 17.
+
+REGISTRAR A ALTERAÇÃO
+  Se alterar o código, adicione uma entrada no CHANGELOG.md e atualize o
+  cabeçalho de versão no topo do index.html (seção 23).
+
+
+==============================================================================
+23. CONTROLE DE VERSÕES (CHANGELOG)
+==============================================================================
+
+O projeto segue uma regra: TODA vez que o código for alterado, cria-se uma
+nova versão (V27, V28...), com:
+  1. Uma entrada no topo do CHANGELOG.md (número, data e descrição);
+  2. Um comentário de cabeçalho no início do index.html com o número da
+     versão, a data e a última mudança.
+
+Resumo das versões mais recentes:
+  V26 — "Sobre nós" rola até a mensagem da marca; nova seção "Fale com a
+        Avina" com WhatsApp, Instagram e e-mail; botão "Contatos" do menu.
+  V25 — Removido o título "Geral" do topo da lista.
+  V24 — Nova mensagem da marca em destaque no topo.
+  V23 — Novo cabeçalho com menu lateral; faixa marrom fina no lugar dos
+        filtros; correção da sombra do carrinho no celular.
+  V22 — Fonte trocada para Montserrat em todo o site.
+  V1 a V21 — Histórico completo no CHANGELOG.md (checkout, WhatsApp,
+        catálogo por CSV, logo, carrinho, tipografia etc.).
+
+
+==============================================================================
+24. LIMITAÇÕES E PONTOS DE ATENÇÃO (LEIA)
+==============================================================================
+
+1) PRODUTO ANL-001 (ANEL REGULÁVEL NARA) — ERRO DE CADASTRO ENCONTRADO
+   Este é um problema real do catálogo atual:
+     a) O prefixo "ANL" não existe no mapa de categorias (o prefixo correto
+        de anel é "ANE"). Resultado: o produto fica na categoria "outro" —
+        aparece em "Geral", mas NÃO aparece ao escolher "Anel" no menu.
+     b) A foto está salva como fotos/ANL-001.png, mas o site procura
+        ANL-001-1.png (com o "-1"). Como não encontra, mostra a foto
+        provisória — e, por ser categoria "outro", ela aparece como um
+        fundo em degradê VAZIO (foi exatamente o que apareceu no celular).
+        Além disso, o arquivo .png na verdade contém uma imagem no formato
+        WebP; navegadores geralmente abrem assim mesmo, mas o ideal é que
+        a extensão corresponda ao formato real.
+   COMO CORRIGIR (escolha uma opção):
+     Opção 1 (recomendada): no produtos.csv trocar a tag ANL-001 por
+       ANE-001 e renomear a foto para fotos/ANE-001-1.webp.
+     Opção 2: manter ANL-001, adicionar  ANL: 'anel',  ao mapa
+       CATEGORY_BY_PREFIX no index.html e renomear a foto para
+       fotos/ANL-001-1.webp.
+
+2) FOTOS -2 DUPLICADAS
+   fotos/CHK-001-2.webp e fotos/CHK-002-2.webp são arquivos IDÊNTICOS
+   (mesmo conteúdo). Se não for intencional, substitua uma delas pela foto
+   correta.
+
+3) NÚMERO DE WHATSAPP
+   O número configurado é +55 31 99082-0145 (com o nono dígito). Confira
+   se é exatamente o número que recebe os pedidos.
+
+4) CARRINHO NÃO É SALVO
+   Recarregar a página apaga o carrinho (seção 15).
+
+5) SEM PAGAMENTO ONLINE, SEM ESTOQUE, SEM CONTA DE CLIENTE
+   Tudo é combinado por WhatsApp. O site não baixa estoque
+   automaticamente: para "esgotar" uma peça, altere o CSV manualmente.
+   O pedido só existe para a loja depois que a cliente aperta "Enviar" no
+   WhatsApp.
+
+6) FRETE E VALORES
+   O site não calcula frete nem descontos; o total é a soma dos preços.
+   O valor da entrega pelo aplicativo 99 é combinado na conversa.
+
+7) ABRIR O ARQUIVO SEM SERVIDOR
+   Mostra o catálogo de exemplo, não o real (seção 3).
+
+8) DEPENDÊNCIA DE INTERNET / GOOGLE FONTS
+   Sem o Google Fonts a fonte cai para Arial/Helvetica (o site continua
+   funcionando).
+
+9) ERROS DE DIGITAÇÃO NO CSV
+   Uma coluna fora do lugar (por exemplo, usar vírgula no lugar do ponto e
+   vírgula) faz o produto aparecer com nome/preço errados. Sempre confira
+   o CSV após editar.
+
+10) PESO DAS FOTOS
+    O site carrega as fotos de todos os produtos ao abrir. Fotos muito
+    pesadas deixam o site lento no celular. Otimize antes de enviar.
+
+
+==============================================================================
+25. PERGUNTAS FREQUENTES
+==============================================================================
+
+P: Coloquei um produto novo e ele não aparece.
+R: Verifique: (1) a linha foi salva no produtos.csv com o separador ";";
+   (2) o arquivo foi enviado ao GitHub e a publicação terminou;
+   (3) recarregue a página forçando a atualização; (4) o prefixo da tag
+   existe no mapa de categorias (senão ele aparece só em "Geral").
+
+P: O produto aparece, mas sem foto (só um fundo em degradê).
+R: O nome da foto não segue o padrão TAG-1.extensão, ou a extensão não é
+   jpg/jpeg/png/webp, ou a tag está com maiúsculas/minúsculas diferentes
+   do CSV. Veja a seção 10.
+
+P: Só a primeira foto aparece, as outras não.
+R: A numeração pode ter um buraco (-1, -3 sem o -2). O site para no
+   primeiro número ausente.
+
+P: O produto aparece em "Geral", mas não na categoria dele.
+R: O prefixo da tag não está no mapa (seção 11). Corrija o prefixo.
+
+P: Como mudo a ordem dos produtos?
+R: Mude a ordem das linhas no produtos.csv.
+
+P: Como oferecer só um acabamento?
+R: Escreva só ele na coluna "acabamentos" (ex.: Dourado). A cliente verá
+   apenas essa opção.
+
+P: A cliente diz que o WhatsApp não abriu.
+R: O navegador do celular pode ter bloqueado a nova aba (pop-up). Peça para
+   permitir, ou tente de novo. O botão "Enviar Pedido pelo WhatsApp" abre
+   o link wa.me em uma nova janela.
+
+P: Posso vender sem WhatsApp?
+R: Não, no formato atual todo pedido segue por WhatsApp. Integrar
+   pagamento online exigiria desenvolver uma nova funcionalidade.
+
+P: O site funciona em qualquer celular?
+R: Sim, em navegadores atuais (Chrome, Safari, Edge, Firefox). O layout foi
+   conferido em tamanho de celular e de computador.
+
+
+==============================================================================
+FIM DO DOCUMENTO
+==============================================================================
